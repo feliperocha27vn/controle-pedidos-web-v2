@@ -5,6 +5,7 @@ import './index.css'
 import { Dashboard } from './pages/dashboard/Dashboard.tsx'
 import { CreateNewRecipe } from './pages/recipes/CreateNewRecipe.tsx'
 import { ManageRecipes } from './pages/recipes/ManageRecipes.tsx'
+import { DetailSale } from './pages/sales/DetailSale.tsx'
 import { ManageSales } from './pages/sales/ManageSales.tsx'
 import { NewSale } from './pages/sales/NewSale.tsx'
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path='new-recipe' element={<CreateNewRecipe />} />
       <Route path='manage-sales' element={<ManageSales />} />
       <Route path='manage-recipes' element={<ManageRecipes />} />
+      <Route path='sale/:idSale' element={<DetailSale />} />
     </Routes>
   </BrowserRouter>,
 )

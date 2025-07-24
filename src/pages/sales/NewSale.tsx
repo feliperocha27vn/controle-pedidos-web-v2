@@ -118,7 +118,7 @@ export function NewSale() {
                                 <AlertDialogAction onClick={() => setShowAlertDialog(false)}>
                                     Fazer nova venda
                                 </AlertDialogAction>
-                                <AlertDialogAction className="bg-transparent" onClick={() => navigate('/dashboard')}>
+                                <AlertDialogAction className="bg-transparent text-black border-2" onClick={() => navigate('/dashboard')}>
                                     Voltar para o início
                                 </AlertDialogAction>
                             </AlertDialogFooter>

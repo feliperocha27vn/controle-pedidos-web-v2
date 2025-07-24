@@ -1,6 +1,7 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/services/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 interface ResponseSales {
     id: string;
@@ -15,6 +16,7 @@ interface ResponseSales {
 
 export function ManageSales() {
     const [sales, setSales] = useState<ResponseSales[]>([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         api.get('/orders').then(response => setSales(response.data))
@@ -23,7 +25,7 @@ export function ManageSales() {
     return (
         <div className="p-5 space-y-4">
             {sales.map((sale) => (
-                <Card key={sale.id} className="@container/card bg-slate-50">
+                <Card key={sale.id} className="@container/card bg-slate-50" onClick={() => navigate(`/sale/${sale.id}`)}>
                     <CardHeader>
                         <CardDescription className="text-2xl">{sale.customerName}</CardDescription>
                         <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
