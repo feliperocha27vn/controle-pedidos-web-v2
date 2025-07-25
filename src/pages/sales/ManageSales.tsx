@@ -1,31 +1,45 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
 import { api } from "@/services/api";
+import { format } from 'date-fns';
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-
-interface ResponseSales {
+interface Order {
     id: string;
     customerName: string;
     quantity: number;
     totalAmount: number;
     status: "pending" | "paid";
+    createdAt: string;
     recipe: {
         title: string
     }
 }
 
 export function ManageSales() {
-    const [sales, setSales] = useState<ResponseSales[]>([])
+    const [sales, setSales] = useState<Order[]>([])
+    const [totalPages, setTotalPages] = useState<number>(0)
     const navigate = useNavigate()
     const [search, setSearch] = useState('')
+    const [page, setPage] = useState(1)
 
     useEffect(() => {
-        api.get('/orders').then(response => setSales(response.data))
-    }, []);
+        // api.get('/orders').then(response => setManySales(response.data))
+        api.get(`/orders/${page}`).then(response => setSales(response.data.orders))
+        api.get(`/orders/${page}`).then(response => setTotalPages(response.data.totalPages))
+    }, [page]);
 
     return (
         <div className="p-5 space-y-4">
@@ -44,10 +58,13 @@ export function ManageSales() {
                     </div>
                 </div>
             </div>
-            {sales.filter((sale) => sale.customerName.toLowerCase().includes(search.toLowerCase())).map((sale) => (
+            {sales.filter(sale => sale.customerName.toLowerCase().includes(search.toLowerCase())).map((sale) => (
                 <Card key={sale.id} className="@container/card bg-slate-50" onClick={() => navigate(`/sale/${sale.id}`)}>
                     <CardHeader>
-                        <CardDescription className="text-2xl">{sale.customerName}</CardDescription>
+                        <div className="w-full flex justify-between items-center">
+                            <CardDescription className="text-2xl">{sale.customerName}</CardDescription>
+                            <CardDescription className="text-lg">{format(sale.createdAt, 'dd/MM')}</CardDescription>
+                        </div>
                         <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                             R$ {sale.totalAmount},00
                         </CardTitle>
@@ -60,6 +77,26 @@ export function ManageSales() {
                     </CardFooter>
                 </Card>
             ))}
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious onClick={() => setPage(page - 1)} />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                        <PaginationItem key={index}>
+                            <PaginationLink href="#" onClick={() => setPage(index + 1)}>
+                                {index + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext onClick={() => setPage(page + 1)} />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     );
 }

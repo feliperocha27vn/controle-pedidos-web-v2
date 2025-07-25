@@ -22,7 +22,8 @@
 				"useKeyWithClickEvents": "off"
 			},
 			"suspicious": {
-				"noAssignInExpressions": "off"
+				"noAssignInExpressions": "off",
+				"noArrayIndexKey": "off"
 			}
 		}
 	},

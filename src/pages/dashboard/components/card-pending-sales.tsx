@@ -10,7 +10,7 @@ export function CardPedingSales() {
     const [totalOrdesPending, setTotalOrdersPending] = useState<ResponseTotalOrders>()
 
     useEffect(() => {
-        api.get('/orders/total').then(response => setTotalOrdersPending(response.data))
+        api.get('/orders/pending').then(response => setTotalOrdersPending(response.data))
     }, []);
 
 
