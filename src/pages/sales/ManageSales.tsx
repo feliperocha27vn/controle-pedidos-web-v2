@@ -34,12 +34,20 @@ export function ManageSales() {
     const navigate = useNavigate()
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(1)
+    const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
-        // api.get('/orders').then(response => setManySales(response.data))
         api.get(`/orders/${page}`).then(response => setSales(response.data.orders))
         api.get(`/orders/${page}`).then(response => setTotalPages(response.data.totalPages))
     }, [page]);
+
+    async function handleSearch(search: string) {
+        const response = await api.get('/orders/search', {
+            params: { search }
+        })
+
+        setSales(response.data)
+    }
 
     return (
         <div className="p-5 space-y-4">
@@ -52,10 +60,11 @@ export function ManageSales() {
                         type="search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSearch(search)}
                     />
-                    <div className="text-muted-foreground pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-2">
+                    <button type="button" onClick={() => handleSearch(search)} className="text-muted-foreground absolute inset-y-0 end-0 flex items-center justify-center pe-2">
                         <Search size={16} />
-                    </div>
+                    </button>
                 </div>
             </div>
             {sales.filter(sale => sale.customerName.toLowerCase().includes(search.toLowerCase())).map((sale) => (
