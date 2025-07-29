@@ -23,7 +23,6 @@ export function ManageSales() {
     const [sales, setSales] = useState<Order[]>([])
     const navigate = useNavigate()
     const [search, setSearch] = useState('')
-    const [page, setPage] = useState(1)
 
     useEffect(() => {
         api.get(`/orders`).then(response => setSales(response.data.orders))
