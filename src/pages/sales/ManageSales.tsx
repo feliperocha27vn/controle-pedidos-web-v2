@@ -1,15 +1,6 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import { api } from "@/services/api";
 import { format } from 'date-fns';
 import { Search } from "lucide-react";
@@ -30,15 +21,13 @@ interface Order {
 
 export function ManageSales() {
     const [sales, setSales] = useState<Order[]>([])
-    const [totalPages, setTotalPages] = useState<number>(0)
     const navigate = useNavigate()
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(1)
 
     useEffect(() => {
-        api.get(`/orders/${page}`).then(response => setSales(response.data.orders))
-        api.get(`/orders/${page}`).then(response => setTotalPages(response.data.totalPages))
-    }, [page]);
+        api.get(`/orders`).then(response => setSales(response.data.orders))
+    }, []);
 
     async function handleSearch(search: string) {
         const response = await api.get('/orders/search', {
@@ -52,6 +41,7 @@ export function ManageSales() {
         <div className="p-5 space-y-4">
             <div className="*:not-first:mt-2">
                 <Label>Pesquise o cliente desejado</Label>
+                <Label className="font-light">Ultimas 10 vendas</Label>
                 <div className="relative">
                     <Input
                         className="pe-11"
@@ -85,26 +75,6 @@ export function ManageSales() {
                     </CardFooter>
                 </Card>
             ))}
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious onClick={() => setPage(page - 1)} />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink href="#" onClick={() => setPage(index + 1)}>
-                                {index + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext onClick={() => setPage(page + 1)} />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
         </div>
     );
 }
