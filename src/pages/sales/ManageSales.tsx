@@ -1,3 +1,4 @@
+import { ButtonReturnHome } from "@/components/button-return-home";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +39,7 @@ export function ManageSales() {
 
     return (
         <div className="p-5 space-y-4">
+            <ButtonReturnHome />
             <div className="*:not-first:mt-2">
                 <Label>Pesquise o cliente desejado</Label>
                 <Label className="font-light">Ultimas 10 vendas</Label>
