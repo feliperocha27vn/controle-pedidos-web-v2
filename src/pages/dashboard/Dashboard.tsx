@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { CardPaidSales } from "./components/card-paid-sales";
 import { CardPedingSales } from "./components/card-pending-sales";
 import { CardTotalSales } from "./components/card-total-sales";
+import { ChartAreaDefault } from "./components/chart";
 
 export function Dashboard() {
     const navigate = useNavigate()
@@ -18,6 +19,7 @@ export function Dashboard() {
             <CardTotalSales />
             <CardPedingSales />
             <CardPaidSales />
+            <ChartAreaDefault />
         </div>
     );
 }
