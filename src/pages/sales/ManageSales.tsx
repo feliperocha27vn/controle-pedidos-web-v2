@@ -1,10 +1,11 @@
 import { ButtonReturnHome } from "@/components/button-return-home";
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/services/api";
 import { format } from 'date-fns';
-import { Search } from "lucide-react";
+import { ClockAlert, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -37,12 +38,19 @@ export function ManageSales() {
         setSales(response.data)
     }
 
+    async function handleFiltered() {
+        const response = await api.get('/orders/pending-filter')
+        setSales(response.data)
+    }
+
     return (
         <div className="p-5 space-y-4">
             <ButtonReturnHome />
             <div className="*:not-first:mt-2">
-                <Label>Pesquise o cliente desejado</Label>
-                <Label className="font-light">Ultimas 10 vendas</Label>
+                <div className="flex flex-col space-y-0.5">
+                    <Label>Pesquise o cliente desejado</Label>
+                    <Label className="font-light">Ultimas 10 vendas</Label>
+                </div>
                 <div className="relative">
                     <Input
                         className="pe-11"
@@ -57,7 +65,13 @@ export function ManageSales() {
                     </button>
                 </div>
             </div>
-            {sales.filter(sale => sale.customerName.toLowerCase().includes(search.toLowerCase())).map((sale) => (
+            <div>
+                <Button variant={'outline'} onClick={() => handleFiltered()}>
+                    <ClockAlert />
+                    Pendentes
+                </Button>
+            </div>
+            {sales?.map((sale) => (
                 <Card key={sale.id} className="@container/card bg-slate-50" onClick={() => navigate(`/sale/${sale.id}`)}>
                     <CardHeader>
                         <div className="w-full flex justify-between items-center">
