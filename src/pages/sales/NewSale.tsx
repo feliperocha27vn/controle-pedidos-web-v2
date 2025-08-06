@@ -1,3 +1,4 @@
+import { ButtonReturnHome } from "@/components/button-return-home";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -53,7 +54,10 @@ export function NewSale() {
     }
 
     return (
-        <div className="h-screen flex justify-center items-center p-4">
+        <div className="h-screen flex flex-col items-center p-4 space-y-4">
+            <div className="w-full">
+                <ButtonReturnHome />
+            </div>
             <Card className="bg-slate-50 w-full">
                 <form className="p-3 space-y-3" onSubmit={handleSubmit(handleSubmitForm)}>
                     <Label>Nome do cliente</Label>

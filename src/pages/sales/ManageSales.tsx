@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/services/api";
+import { formatterMoney } from "@/utils/format-money";
 import { format } from 'date-fns';
 import { ChevronDownIcon, ClockAlert, Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -57,11 +58,7 @@ export function ManageSales() {
         const response = await api.get('/orders/pending-filter')
         setSales(response.data)
     }
-
-    const formatterMoney = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
+    ;
 
     return (
         <div className="p-5 space-y-4">
