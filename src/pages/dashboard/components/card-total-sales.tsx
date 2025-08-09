@@ -19,12 +19,12 @@ export function CardTotalSales() {
             <CardHeader>
                 <CardDescription>Vendas</CardDescription>
                 <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                    {totalOrdes?.totalAmount ? formatterMoney.format(totalOrdes.totalAmount) : "0"}
+                    {totalOrdes?.totalAmount ? formatterMoney.format(totalOrdes.totalAmount) : formatterMoney.format(0)}
                 </CardTitle>
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
                 <div className="text-muted-foreground">
-                    Total de vendas até agora
+                    Total de vendas desse mês
                 </div>
             </CardFooter>
         </Card>

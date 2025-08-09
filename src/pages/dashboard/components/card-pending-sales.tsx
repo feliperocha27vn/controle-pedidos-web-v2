@@ -25,7 +25,7 @@ export function CardPedingSales() {
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
                 <div className="text-muted-foreground">
-                    Total que ainda temos a receber
+                    Total que temos a receber nesse mês
                 </div>
             </CardFooter>
         </Card>

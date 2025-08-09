@@ -24,7 +24,7 @@ export function CardPaidSales() {
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
                 <div className="text-muted-foreground">
-                    Total de vendas que já foram pagas
+                    Total de vendas que já foram pagas desse mês
                 </div>
             </CardFooter>
         </Card>
