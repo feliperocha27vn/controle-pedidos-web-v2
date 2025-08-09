@@ -9,9 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { api } from "@/services/api";
 import { formatterMoney } from "@/utils/format-money";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { ChevronDownIcon, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { DateValue } from "react-aria-components";
+
 
 
 interface FetchOrdersByDelivery {
@@ -46,6 +49,12 @@ export function ManageDelivery() {
             })
     }, [date])
 
+    async function handleChangeDeliveryStatus(orderId: string) {
+        await api.patch(`/order/change-status/${orderId}`)
+        const ordersFiltered = orders.filter(order => order.id !== orderId);
+        setOrders(ordersFiltered)
+    }
+
     return (
         <div className="p-2 space-y-4">
             <div className="flex flex-col gap-y-2 w-5/12">
@@ -77,14 +86,24 @@ export function ManageDelivery() {
                             <User />
                             <CardTitle>{order.customerName}</CardTitle>
                         </div>
-                        <Button>Confirmar entrega</Button>
+                        <Button onClick={() => handleChangeDeliveryStatus(order.id)}>Confirmar entrega</Button>
                     </CardHeader>
                     <div className="px-6 font-light">
                         <p>{formatterMoney.format(order.totalAmount)}</p>
                     </div>
                     <CardFooter className="flex items-center gap-x-4">
                         <div className="text-sm font-light">
-                            {order.status}
+                            <h2 className="font-semibold text-lg">Status</h2>
+                            {order.status === 'pending' ? 'Pendente' : 'Pago'}
+                        </div>
+                        <div className="text-sm font-light">
+                            <h2 className="font-semibold text-lg">Data entrega</h2>
+                            {format(order.deliveryDate, 'ccc, ', {
+                                locale: ptBR
+                            })}
+                            {format(order.deliveryDate, 'P', {
+                                locale: ptBR
+                            })}
                         </div>
                     </CardFooter>
                 </Card>

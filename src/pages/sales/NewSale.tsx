@@ -9,7 +9,13 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar-rac";
 import { Card } from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,9 +26,13 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/services/api";
+import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { DateValue } from "react-aria-components";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+
+
 
 interface RecipesResponse {
     title: string;
@@ -34,12 +44,14 @@ interface CreateNewOrder {
     quantity: number;
     status: "pending" | "paid";
     idRecipe: string;
+    deliveryDate: Date
 }
 
 export function NewSale() {
     const { handleSubmit, register, control } = useForm<CreateNewOrder>()
     const [recipes, setRecipes] = useState<RecipesResponse[]>([])
     const [showAlertDialog, setShowAlertDialog] = useState(false)
+    const [date, setDate] = useState<DateValue | null>()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -47,7 +59,9 @@ export function NewSale() {
     }, []);
 
     async function handleSubmitForm(data: CreateNewOrder) {
-        const response = await api.post('/orders', data);
+        const deliveryDate = date ? new Date(date.toString()) : new Date();
+        const dataForm = { ...data, deliveryDate }
+        const response = await api.post('/orders', dataForm);
         if (response.status === 201) {
             setShowAlertDialog(true)
         }
@@ -92,21 +106,42 @@ export function NewSale() {
                             </Select>
                         )}
                     />
-                    <Controller
-                        name="status"
-                        control={control}
-                        render={({ field }) => (
-                            <Select value={field.value} onValueChange={field.onChange}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Selecione o status da venda" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white">
-                                    <SelectItem value="pending">Pendente</SelectItem>
-                                    <SelectItem value="paid">Pago</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
+                    <div className="w-full grid grid-cols-2 gap-x-2">
+                        <Controller
+                            name="status"
+                            control={control}
+                            render={({ field }) => (
+                                <Select value={field.value} onValueChange={field.onChange}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Status" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-white">
+                                        <SelectItem value="pending">Pendente</SelectItem>
+                                        <SelectItem value="paid">Pago</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild className="w-full">
+                                <Button variant="outline">
+                                    Data da entrega
+                                    <ChevronDownIcon
+                                        className="-me-1 opacity-60"
+                                        size={16}
+                                        aria-hidden="true"
+                                    />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="min-w-(--radix-dropdown-menu-trigger-width)">
+                                <Calendar
+                                    className="rounded-md border p-2"
+                                    value={date}
+                                    onChange={setDate}
+                                />
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                     <Button>
                         Adicionar venda
                     </Button>

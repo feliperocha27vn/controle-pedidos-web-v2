@@ -2,6 +2,7 @@ import { ButtonReturnHome } from "@/components/button-return-home";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/services/api";
+import { formatterMoney } from "@/utils/format-money";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -22,12 +23,6 @@ export function ManageRecipes() {
             .then(response => setRecipes(response.data))
     }, []);
 
-
-    const formatter = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    })
-
     async function handleDeleteRecipe(idRecipe: string) {
         try {
             await api.delete(`/recipes/${idRecipe}`);
@@ -45,7 +40,7 @@ export function ManageRecipes() {
                     <CardHeader>
                         <CardDescription className="text-2xl">{recipe.title}</CardDescription>
                         <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                            {formatter.format(recipe.price)}
+                            {formatterMoney.format(recipe.price)}
                         </CardTitle>
                     </CardHeader>
                     <div className="pl-6 space-x-3 mt-3">

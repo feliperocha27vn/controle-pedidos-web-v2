@@ -1,5 +1,6 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/services/api";
+import { formatterMoney } from "@/utils/format-money";
 import { useEffect, useState } from "react";
 
 interface ResponseTotalOrders {
@@ -18,7 +19,7 @@ export function CardTotalSales() {
             <CardHeader>
                 <CardDescription>Vendas</CardDescription>
                 <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                    R$ {totalOrdes?.totalAmount ? totalOrdes.totalAmount : "0"},00
+                    {totalOrdes?.totalAmount ? formatterMoney.format(totalOrdes.totalAmount) : "0"}
                 </CardTitle>
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
